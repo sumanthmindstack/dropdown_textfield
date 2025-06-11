@@ -804,12 +804,6 @@ class _DropDownTextFieldState extends State<DropDownTextField>
                   color: Color(0xFF333333),
                   borderRadius:
                       BorderRadius.all(Radius.circular(widget.dropdownRadius)),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 5,
-                    ),
-                  ],
                 ),
                 child: !widget.isMultiSelection
                     ? SingleSelection(
