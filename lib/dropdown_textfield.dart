@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:collection/collection.dart';
 import 'package:dropdown_textfield/single_selction.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-
 import 'multi_selection.dart';
 
 class IconProperty {
@@ -101,6 +99,7 @@ class DropDownTextField extends StatefulWidget {
         submitButtonText = null,
         submitButtonTextStyle = null,
         super(key: key);
+
   const DropDownTextField.multiSelection(
       {Key? key,
       this.controller,
@@ -146,107 +145,43 @@ class DropDownTextField extends StatefulWidget {
         singleController = null,
         searchDecoration = null,
         keyboardType = null,
-        // keyboardHeight = 0,
         super(key: key);
 
-  ///single and multiple dropdown controller.
-  ///It must be type of SingleValueDropDownController or MultiValueDropDownController.
   final dynamic controller;
-
-  ///single dropdown controller,
   final SingleValueDropDownController? singleController;
-
-  ///multi dropdown controller
   final MultiValueDropDownController? multiController;
-
-  ///define the radius of dropdown List ,default value is 12
   final double dropdownRadius;
-
-  ///initial value ,if it is null or not exist in dropDownList then it will not display value.
   final dynamic initialValue;
-
-  ///dropDownList,List of dropdown values
-  ///List<DropDownValueModel>
   final List<DropDownValueModel> dropDownList;
-
-  ///function,called when value selected from dropdown.
-  ///for single Selection Dropdown it will return single DropDownValueModel object,
-  ///and for multi Selection Dropdown ,it will return list of DropDownValueModel object,
   final ValueSetter? onChanged;
-
   final bool isMultiSelection;
-
   final TextStyle? textStyle;
-
   final EdgeInsets? padding;
-
-  ///override default textfield decoration
   final InputDecoration? textFieldDecoration;
-
-  ///customize dropdown icon size and color
   final IconProperty? dropDownIconProperty;
-
-  ///by setting isEnabled=false to disable textfield,default value true
   final bool isEnabled;
-
   final FormFieldValidator<String>? validator;
-
-  ///by setting enableSearch=true enable search option in dropdown,as of now this feature enabled only for single selection dropdown
   final bool enableSearch;
-
   final bool readOnly;
-
-  ///set displayCompleteItem=true, if you want show complete list of item in textfield else it will display like "number_of_item item selected"
   final bool displayCompleteItem;
-
-  ///Maximum number of dropdown item to display,default value is 6
   final int dropDownItemCount;
-
   final FocusNode? searchFocusNode;
   final FocusNode? textFieldFocusNode;
   final TextStyle? searchTextStyle;
-
-  ///override default search decoration
   final InputDecoration? searchDecoration;
-
-  ///override default search keyboard type,only applicable if enableSearch=true,
   final TextInputType? searchKeyboardType;
-
-  ///by setting searchAutofocus=true to autofocus search textfield,only applicable if enableSearch=true,
-  ///  ///default value is false
   final bool searchAutofocus;
-
-  ///by setting searchShowCursor=false to hide cursor from search textfield,only applicable if enableSearch=true,
   final bool? searchShowCursor;
-
-  ///by set clearOption=false to hide clear suffix icon button from textfield.
   final bool clearOption;
-
-  ///customize Clear icon size and color
   final IconProperty? clearIconProperty;
-
-  ///space between textfield and list ,default value is 0
   final double listSpace;
-
-  ///dropdown List item padding
   final ListPadding? listPadding;
-
-  ///multi dropdown submit button text
   final String? submitButtonText;
-
-  ///multi dropdown submit button color
   final Color? submitButtonColor;
-
-  ///multi dropdown submit button text style
   final TextStyle? submitButtonTextStyle;
-
-  ///dropdown list item text style
   final TextStyle? listTextStyle;
-
   final TextInputType? keyboardType;
   final AutovalidateMode? autovalidateMode;
-
-  ///customize checkbox property
   final CheckBoxProperty? checkBoxProperty;
 
   @override
@@ -260,7 +195,6 @@ class _DropDownTextFieldState extends State<DropDownTextField>
 
   late TextEditingController _cnt;
   late String _hintText;
-
   late bool _isExpanded;
   OverlayEntry? _entry;
   OverlayEntry? _entry2;
@@ -269,7 +203,6 @@ class _DropDownTextFieldState extends State<DropDownTextField>
   late AnimationController _controller;
   late Animation<double> _heightFactor;
   List<bool> _multiSelectionValue = [];
-  // late String selectedItem;
   late double _height;
   late List<DropDownValueModel> _dropDownList;
   late int _maxListItem;
@@ -288,6 +221,7 @@ class _DropDownTextFieldState extends State<DropDownTextField>
   late ListPadding _listPadding;
   late TextDirection _currentDirection;
   GlobalKey overlayKey = GlobalKey();
+
   @override
   void initState() {
     _cnt = TextEditingController();
@@ -342,7 +276,6 @@ class _DropDownTextFieldState extends State<DropDownTextField>
       _multiSelectionValue.add(false);
     }
 
-    ///initial value load
     if (widget.initialValue != null) {
       _dropDownList = List.from(widget.dropDownList);
       if (widget.isMultiSelection) {
@@ -397,25 +330,6 @@ class _DropDownTextFieldState extends State<DropDownTextField>
             _multiSelectionValue.add(false);
           }
         }
-        // if (widget.isForceMultiSelectionClear &&
-        //     _multiSelectionValue.isNotEmpty) {
-        //   _multiSelectionValue = [];
-        //   _cnt.text = "";
-        //   for (int i = 0; i < _dropDownList.length; i++) {
-        //     _multiSelectionValue.add(false);
-        //   }
-        // }
-
-        // if (widget.multiController != null) {
-        //   List<DropDownValueModel> multiCnt = [];
-        //   for (int i = 0; i < dropDownList.length; i++) {
-        //     if (multiSelectionValue[i]) {
-        //       multiCnt.add(dropDownList[i]);
-        //     }
-        //   }
-        //   widget.multiController!
-        //       .setDropDown(multiCnt.isNotEmpty ? multiCnt : null);
-        // }
 
         if (widget.multiController != null) {
           if (oldWidget != null &&
@@ -788,7 +702,6 @@ class _DropDownTextFieldState extends State<DropDownTextField>
   }
 
   Widget buildOverlay(context, child) {
-    // final bool isRTL = currentDirection == TextDirection.rtl;
     return Directionality(
       textDirection: _currentDirection,
       child: ClipRect(
@@ -801,9 +714,16 @@ class _DropDownTextFieldState extends State<DropDownTextField>
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.white, // Changed to white
                   borderRadius:
                       BorderRadius.all(Radius.circular(widget.dropdownRadius)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
                 ),
                 child: !widget.isMultiSelection
                     ? SingleSelection(
@@ -828,8 +748,6 @@ class _DropDownTextFieldState extends State<DropDownTextField>
                           if (widget.onChanged != null) {
                             widget.onChanged!(item);
                           }
-                          // Navigator.pop(context, null);
-
                           hideOverlay();
                         },
                         searchHeight: _searchWidgetHeight,
@@ -838,21 +756,6 @@ class _DropDownTextFieldState extends State<DropDownTextField>
                         searchDecoration: widget.searchDecoration,
                         searchShowCursor: widget.searchShowCursor,
                         listPadding: _listPadding,
-                        // onSearchTap: () {
-                        //   double posFromBot =
-                        //       MediaQuery.of(context).size.height - _offset.dy;
-                        //   if (posFromBot < _keyboardHeight &&
-                        //       !_isScrollPadding &&
-                        //       _isPortrait) {
-                        //     shiftOverlayEntry1to2();
-                        //   }
-                        // },
-                        // onSearchSubmit: () {
-                        //   if (_isScrollPadding) {
-                        //     shiftOverlayEntry2to1();
-                        //   }
-                        // },
-                        clearIconProperty: widget.clearIconProperty,
                       )
                     : MultiSelection(
                         buttonTextStyle: widget.submitButtonTextStyle,
@@ -894,9 +797,7 @@ class _DropDownTextFieldState extends State<DropDownTextField>
                           if (widget.onChanged != null) {
                             widget.onChanged!(result);
                           }
-
                           hideOverlay();
-
                           setState(() {});
                         },
                         checkBoxProperty: widget.checkBoxProperty,
@@ -913,8 +814,6 @@ class _DropDownTextFieldState extends State<DropDownTextField>
 class DropDownValueModel extends Equatable {
   final String name;
   final dynamic value;
-
-  ///as of now only added for multiselection dropdown
   final String? toolTipMsg;
 
   const DropDownValueModel(
